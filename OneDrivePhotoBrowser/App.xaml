@@ -1,0 +1,15 @@
+﻿<Application
+    x:Class="OneDrivePhotoBrowser.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OneDrivePhotoBrowser"
+    RequestedTheme="Light">
+
+
+    <Application.Resources>
+        <!-- Add your client id here. -->
+        <x:String x:Key="ida:ClientID">your Client Id</x:String>
+        <x:String x:Key="ida:ReturnUrl">urn:ietf:wg:oauth:2.0:oob</x:String>
+    </Application.Resources>
+
+</Application>
