@@ -1,7 +1,10 @@
-# OneDrive Photo Browser sample
+# Microsoft Graph OneDrive Photo Browser sample
 
-The OneDrive Photo Browser sample is a Windows Universal app that uses the OneDrive SDK for C#/.NET. 
+The Microsoft Graph OneDrive Photo Browser sample is a Windows Universal app that uses the [Microsoft Graph .NET Client Library](https://github.com/microsoftgraph/msgraph-sdk-dotnet) for C#/.NET. 
 The sample app displays only items that are images from a user's OneDrive. Note that this sample does not work with OneDrive for Business.
+
+The sample uses the v2.0 authentication endpoint, which enables users to sign in with either their personal or work or school Microsoft accounts.
+
 
 ## Set up
 
@@ -9,8 +12,9 @@ The sample app displays only items that are images from a user's OneDrive. Note 
 
 To run the sample, you will need: 
 
-* Visual Studio 2013 or 2015, with Universal Windows App Development Tools **Note:** If you don't have Universal Windows App Development Tools installed, open **Control Panel** | **Uninstall a program**. Then right-click **Microsoft Visual Studio** and click **Change**. Select **Modify** and then choose **Universal Windows App Development Tools**. Click **Update**. For more info about setting up your machine for Universal Windows Platform development, see [Build UWP apps with Visual Studio](https://msdn.microsoft.com/en-us/library/windows/apps/dn609832.aspx).
-* A Microsoft account and/or Azure Active Directory account with access to OneDrive for Business
+* Visual Studio 2015, with Universal Windows App Development Tools **Note:** If you don't have Universal Windows App Development Tools installed, open **Control Panel** | **Uninstall a program**. Then right-click **Microsoft Visual Studio** and click **Change**. Select **Modify** and then choose **Universal Windows App Development Tools**. Click **Update**. For more info about setting up your machine for Universal Windows Platform development, see [Build UWP apps with Visual Studio](https://msdn.microsoft.com/en-us/library/windows/apps/dn609832.aspx).
+* Windows 10 ([development mode enabled](https://msdn.microsoft.com/library/windows/apps/xaml/dn706236.aspx))
+* Either a [Microsoft](www.outlook.com) or [Office 365 for business account](https://msdn.microsoft.com/en-us/office/office365/howto/setup-development-environment#bk_Office365Account).
 * Knowledge of Windows Universal app development
 
 ### Download the sample
@@ -43,6 +47,46 @@ After you've loaded the solution in Visual Studio, configure the sample to use t
 The OneDrive Photo Browser sample app will open the signed-in user's personal OneDrive, with only folders and images displayed. If the file is not an image, it will not show up in the OneDrive Photo Browser app. Select a folder to see all images in that folder. Select an image to see a larger display of the image, with scroll view.
 
 
+## API features
+
+### MSAL sign-in
+
+Users can log in with either a [Microsoft](www.outlook.com) or [Office 365 for business account](https://msdn.microsoft.com/en-us/office/office365/howto/setup-development-environment#bk_Office365Account).
+
+After the user signs in, the `AuthenticationHelper` class returns an MSAL `GraphServicesClient`.
+
+```csharp
+        public static GraphServiceClient GetAuthenticatedClient()
+        {
+            if (graphClient == null)
+            {
+                // Create Microsoft Graph client.
+                try
+                {
+                    graphClient = new GraphServiceClient(
+                        "https://graph.microsoft.com/v1.0",
+                        new DelegateAuthenticationProvider(
+                            async (requestMessage) =>
+                            {
+                                var token = await GetTokenForUserAsync();
+                                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
+                                // This header has been added to identify our sample in the Microsoft Graph service.  If extracting this code for your project please remove.
+                                requestMessage.Headers.Add("SampleID", "uwp-csharp-photobrowser-sample");
+
+                            }));
+                    return graphClient;
+                }
+
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Could not create a graph client: " + ex.Message);
+                }
+            }
+
+            return graphClient;
+        }
+```
+
 ### Get thumbnails for an image in OneDrive
 
 In this example, thumbnails are returned for an item, if it is an image. `GetAsync()` is used to get the item's properties.
@@ -50,7 +94,7 @@ In this example, thumbnails are returned for an item, if it is an image. `GetAsy
 ```csharp
            IEnumerable<DriveItem> items;
 
-            var expandString = "thumbnails, children";
+            var expandString = "thumbnails, children($expand=thumbnails)";
 
             // If id isn't set, get the OneDrive root's photos and folders. Otherwise, get those for the specified item ID.
             // Also retrieve the thumbnails for each item if using a consumer client.
@@ -66,9 +110,7 @@ In this example, thumbnails are returned for an item, if it is an image. `GetAsy
 
 ## More resources
 
-* [OneDrive SDK for .NET](https://github.com/OneDrive/onedrive-sdk-csharp) documentation
-* [OneDrive API](https://dev.onedrive.com/) - Official documentation for the OneDrive API
-* [OneDriveApiBrowser](https://github.com/OneDrive/onedrive-sample-apibrowser-dotnet) - A Windows Forms sample app using OneDrive SDK for CSharp 
+* [Microsoft Graph .NET Client Library](https://github.com/microsoftgraph/msgraph-sdk-dotnet)
 * [Windows Universal apps](https://msdn.microsoft.com/en-us/library/windows/apps/dn726767.aspx) - More information about Windows Universal apps
 
 ## License
