@@ -29,7 +29,7 @@ To run the sample, you will need:
 3. Enter a name for the app, and select **Create application**. The registration page displays, listing the properties of your app.  
 4. Under **Platforms**, select **Add platform**.  
 5. Select **Mobile application**.  
-6. Copy both the Client Id (App Id) value to the clipboard. You'll need to use it in the sample app. The app id is a unique identifier for your app.   
+6. Copy the Client Id (App Id) value to the clipboard. You'll need to use it in the sample app. The app id is a unique identifier for your app.   
 7. Select **Save**.  
 
 After you've loaded the solution in Visual Studio, configure the sample to use the Client Id that you registered by adding it as a key in the **Application.Resources** node of the App.xaml file.
