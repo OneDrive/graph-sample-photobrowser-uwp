@@ -1,3 +1,18 @@
+---
+page_type: sample
+products:
+- office-onedrive
+- ms-graph
+languages:
+- csharp
+extensions:
+  contentType: samples
+  technologies:
+  - Microsoft Graph
+  services:
+  - OneDrive
+  createdDate: 2/21/2017 10:21:21 AM
+---
 # Microsoft Graph OneDrive Photo Browser sample
 
 The Microsoft Graph OneDrive Photo Browser sample is a Windows Universal app that uses the [Microsoft Graph .NET Client Library](https://github.com/microsoftgraph/msgraph-sdk-dotnet) for C#/.NET. 
